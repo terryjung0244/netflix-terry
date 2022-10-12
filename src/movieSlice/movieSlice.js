@@ -1,22 +1,35 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
-  data: null,
+  popularMovieList: null,
+  topRatedMovieList: null,
+  upComingMovieList: null,
   error: null,
   loading: false,
 };
 
 export const getTmdbApi = createAsyncThunk("getMovieApi", async () => {
   try {
-    let popularEndpoint = `/3/movie/popular?api_key=${}&language=en-US&page=1`;
-    let response = await fetch(`https://api.themoviedb.org${popularEndpoint}`);
-    let data = await response.json();
-    return data;
+    let popularMovieEndpoint = `/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`;
+    let responsePopularMovie = await fetch(`https://api.themoviedb.org${popularMovieEndpoint}`);
+    let popularMovieList = await responsePopularMovie.json();
+
+    let topRatedMovieEndpoint = `/3/movie/top_rated?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`;
+    let responseTopRatedMovie = await fetch(`https://api.themoviedb.org${topRatedMovieEndpoint}`);
+    let topRatedMovieList = await responseTopRatedMovie.json();
+
+    let upComingMovieEndpoint = `/3/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`;
+    let responseUpComingMovie = await fetch(`https://api.themoviedb.org${upComingMovieEndpoint}`);
+    let upComingMovieList = await responseUpComingMovie.json();
+
+    return {
+      popularMovieList,
+      topRatedMovieList,
+      upComingMovieList,
+    };
   } catch (err) {
     throw err;
   }
-
-  Promise.all();
 });
 
 const tmdbSlice = createSlice({
@@ -34,7 +47,9 @@ const tmdbSlice = createSlice({
       })
       .addCase(getTmdbApi.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.popularMovieList = action.payload.popularMovieList;
+        state.topRatedMovieList = action.payload.topRatedMovieList;
+        state.upComingMovieList = action.payload.upComingMovieList;
       })
       .addCase(getTmdbApi.rejected, (state, action) => {
         state.loading = false;

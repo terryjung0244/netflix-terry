@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import tmdbSlice from "./../../movieSlice/movieSlice";
 
 export const createStore = () =>
   configureStore({
-    reducer: {},
+    reducer: {
+      tmdbSlice,
+    },
   });
 
 export const store = createStore();

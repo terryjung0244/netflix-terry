@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./../assets/netflixLogo.png";
+import logo from "assets/netflixLogo.png";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -25,12 +25,12 @@ const Navbar = () => {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <Link to="/" style={{ color: "white" }} className="nav-link active" aria-current="page" href="#">
+                  <Link to="/" style={{ color: "white" }} className="nav-link active" aria-current="page">
                     Home
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/movies" style={{ color: "white" }} className="nav-link" href="#">
+                  <Link to="/movies" style={{ color: "white" }} className="nav-link">
                     Movies
                   </Link>
                 </li>

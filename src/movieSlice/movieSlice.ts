@@ -1,9 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { genreModel, MovieModel } from "service/type/model/movie";
 
-const initialState = {
+type InitialStateType = {
+  popularMovieList: MovieModel[] | null;
+  topRatedMovieList: MovieModel[] | null;
+  upComingMovieList: MovieModel[] | null;
+  genreApi: genreModel[] | null;
+  error: Error | null | string;
+  loading: boolean;
+};
+
+const initialState: InitialStateType = {
   popularMovieList: null,
   topRatedMovieList: null,
   upComingMovieList: null,
+  genreApi: null,
   error: null,
   loading: false,
 };
@@ -22,10 +33,15 @@ export const getTmdbApi = createAsyncThunk("getMovieApi", async () => {
     let responseUpComingMovie = await fetch(`https://api.themoviedb.org${upComingMovieEndpoint}`);
     let upComingMovieList = await responseUpComingMovie.json();
 
+    let genreApiEndpoint = `/3/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`;
+    let responseGenreApi = await fetch(`https://api.themoviedb.org${genreApiEndpoint}`);
+    let genreApi = await responseGenreApi.json();
+
     return {
       popularMovieList,
       topRatedMovieList,
       upComingMovieList,
+      genreApi,
     };
   } catch (err) {
     throw err;
@@ -50,10 +66,11 @@ const tmdbSlice = createSlice({
         state.popularMovieList = action.payload.popularMovieList;
         state.topRatedMovieList = action.payload.topRatedMovieList;
         state.upComingMovieList = action.payload.upComingMovieList;
+        state.genreApi = action.payload.genreApi.genres;
       })
       .addCase(getTmdbApi.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error;
+        state.error = action.error as string; //들어오는 값을 정해줄 수 있다.
       });
   },
 });

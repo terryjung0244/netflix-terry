@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch } from "service/hook/useAppDispatch";
+import useAppSelector from "service/hook/useAppSelector";
 import { getTmdbApi } from "../movieSlice/movieSlice";
 import Banner from "../components/Banner";
 import MovieSlide from "../components/MovieSlide";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const { loading, popularMovieList, topRatedMovieList, upComingMovieList } = useSelector((state) => state.tmdbSlice);
+  const dispatch = useAppDispatch();
+  const { loading, popularMovieList, topRatedMovieList, upComingMovieList, genreApi } = useAppSelector((state) => state.tmdbSlice);
 
   useEffect(() => {
     dispatch(getTmdbApi());
@@ -17,9 +19,11 @@ const Home = () => {
   //     return <div>Helllllo</div>;
   //   }
   // };
+
+  console.log("genreApi", genreApi);
   return (
-    <div>
-      <div>{popularMovieList && <Banner movie={popularMovieList.results} />}</div>
+    <div className="homeMainContainer">
+      <div>{popularMovieList && <Banner movie={popularMovieList} />}</div>
       <div>
         <h2>
           {/* {popularMovieList &&
@@ -32,11 +36,11 @@ const Home = () => {
               );
             })} */}
         </h2>
-        <h2>Popular Movies</h2>
+        <h2 className="homeH2Container">Popular Movies</h2>
         <MovieSlide movies={popularMovieList} />
-        <h2>Toprated Movies</h2>
+        <h2 className="homeH2Container">Toprated Movies</h2>
         <MovieSlide movies={topRatedMovieList} />
-        <h2>Upcoming Movies</h2>
+        <h2 className="homeH2Container">Upcoming Movies</h2>
         <MovieSlide movies={upComingMovieList} />
       </div>
     </div>

@@ -16,7 +16,7 @@ const MovieSlide = ({ movies }) => {
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 3,
+      items: 2,
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
@@ -24,16 +24,23 @@ const MovieSlide = ({ movies }) => {
     },
   };
 
+  console.log(movies);
+
   return (
     <div>
-      <Carousel responsive={responsive}>
-        {movies &&
-          movies.results.map((eachMovieList) => (
-            <div>
-              <MovieCard eachMovieList={eachMovieList} />
-            </div>
-          ))}
-      </Carousel>
+      {movies ? (
+        <div>
+          <Carousel responsive={responsive}>
+            {movies.results.map((movieList) => (
+              <div key={movieList.id}>
+                <MovieCard movieList={movieList} />
+              </div>
+            ))}
+          </Carousel>
+        </div>
+      ) : (
+        <div> Loading...</div>
+      )}
     </div>
   );
 };

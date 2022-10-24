@@ -1,17 +1,24 @@
 import React from "react";
+import { MovieModel } from "service/type/model/movie";
+// import { BannerProps } from "./Banner.interface";
 
-const Banner = ({ movie }) => {
+interface BannerProps {
+  movies: MovieModel[]
+}
+
+const Banner = ({ movies }: BannerProps) => {
+
   return (
     <div>
       <div
         className="banner"
         style={{
-          backgroundImage: "url(" + `https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movie[0].poster_path}` + ")",
+          backgroundImage: "url(" + `https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/${movies[0].poster_path}` + ")",
         }}
       >
         <div className="banner-info">
-          <h1>{movie[0].title}</h1>
-          <p>{movie[0].overview}</p>
+          <h1>{movies[0].title}</h1>
+          <p>{movies[0].overview}</p>
         </div>
       </div>
     </div>

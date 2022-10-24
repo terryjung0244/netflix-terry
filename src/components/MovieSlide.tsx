@@ -1,9 +1,14 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { MovieModel } from "service/type/model/movie";
 import MovieCard from "./MovieCard";
 
-const MovieSlide = ({ movies }) => {
+interface MovieSlideProps {
+  movies: MovieModel[]
+}
+
+const MovieSlide = ({ movies }: MovieSlideProps) => {
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -31,9 +36,9 @@ const MovieSlide = ({ movies }) => {
       {movies ? (
         <div>
           <Carousel responsive={responsive}>
-            {movies.results.map((movieList) => (
-              <div key={movieList.id}>
-                <MovieCard movieList={movieList} />
+            {movies.map((movie: MovieModel) => (
+              <div key={movie.id}>
+                <MovieCard movie={movie} />
               </div>
             ))}
           </Carousel>

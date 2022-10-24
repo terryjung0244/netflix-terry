@@ -5,6 +5,7 @@ import useAppSelector from "service/hook/useAppSelector";
 import { getTmdbApi } from "../movieSlice/movieSlice";
 import Banner from "../components/Banner";
 import MovieSlide from "../components/MovieSlide";
+import { MovieModel } from "service/type/model/movie";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -20,10 +21,10 @@ const Home = () => {
   //   }
   // };
 
-  console.log("genreApi", genreApi);
+  // console.log("genreApi", genreApi);
   return (
     <div className="homeMainContainer">
-      <div>{popularMovieList && <Banner movie={popularMovieList} />}</div>
+      <div>{popularMovieList && <Banner movies={popularMovieList} />}</div>
       <div>
         <h2>
           {/* {popularMovieList &&
@@ -37,11 +38,11 @@ const Home = () => {
             })} */}
         </h2>
         <h2 className="homeH2Container">Popular Movies</h2>
-        <MovieSlide movies={popularMovieList} />
+        {popularMovieList && <MovieSlide movies={popularMovieList} />}
         <h2 className="homeH2Container">Toprated Movies</h2>
-        <MovieSlide movies={topRatedMovieList} />
-        <h2 className="homeH2Container">Upcoming Movies</h2>
-        <MovieSlide movies={upComingMovieList} />
+        {topRatedMovieList && <MovieSlide movies={topRatedMovieList} />}
+        {/* <h2 className="homeH2Container">Upcoming Movies</h2>
+        <MovieSlide movies={upComingMovieList} /> */}
       </div>
     </div>
   );

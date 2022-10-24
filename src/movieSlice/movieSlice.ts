@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { genreModel, MovieModel } from "service/type/model/movie";
+import { genreModel, MovieModel, parseMovieResponseToMovieModel } from "service/type/model/movie";
+import { MovieResponse } from "service/type/response/movie";
 
 type InitialStateType = {
   popularMovieList: MovieModel[] | null;
@@ -23,11 +24,15 @@ export const getTmdbApi = createAsyncThunk("getMovieApi", async () => {
   try {
     let popularMovieEndpoint = `/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`;
     let responsePopularMovie = await fetch(`https://api.themoviedb.org${popularMovieEndpoint}`);
-    let popularMovieList = await responsePopularMovie.json();
+    let popularMovieList: MovieResponse = await responsePopularMovie.json();
+
+    const parsedPopularMovieResponseToMovieModel: MovieModel[] = parseMovieResponseToMovieModel(popularMovieList)
 
     let topRatedMovieEndpoint = `/3/movie/top_rated?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`;
     let responseTopRatedMovie = await fetch(`https://api.themoviedb.org${topRatedMovieEndpoint}`);
-    let topRatedMovieList = await responseTopRatedMovie.json();
+    let topRatedMovieList: MovieResponse = await responseTopRatedMovie.json();
+
+    const parsedTopratedMovieResponseToMovieModel: MovieModel[] = parseMovieResponseToMovieModel(topRatedMovieList)
 
     let upComingMovieEndpoint = `/3/movie/upcoming?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`;
     let responseUpComingMovie = await fetch(`https://api.themoviedb.org${upComingMovieEndpoint}`);
@@ -38,8 +43,8 @@ export const getTmdbApi = createAsyncThunk("getMovieApi", async () => {
     let genreApi = await responseGenreApi.json();
 
     return {
-      popularMovieList,
-      topRatedMovieList,
+      parsedPopularMovieResponseToMovieModel,
+      parsedTopratedMovieResponseToMovieModel,
       upComingMovieList,
       genreApi,
     };
@@ -63,8 +68,8 @@ const tmdbSlice = createSlice({
       })
       .addCase(getTmdbApi.fulfilled, (state, action) => {
         state.loading = false;
-        state.popularMovieList = action.payload.popularMovieList;
-        state.topRatedMovieList = action.payload.topRatedMovieList;
+        state.popularMovieList = action.payload.parsedPopularMovieResponseToMovieModel;
+        state.topRatedMovieList = action.payload.parsedTopratedMovieResponseToMovieModel;
         state.upComingMovieList = action.payload.upComingMovieList;
         state.genreApi = action.payload.genreApi.genres;
       })
